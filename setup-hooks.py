@@ -5,7 +5,7 @@ import sys
 from urllib.error import HTTPError
 
 # URL to the shared repository for hooks
-HOOKS_REPO_URL = "https://github.com/PepperDash/test-template/raw/main/.githooks/pre-commit"
+HOOKS_REPO_URL = "https://github.com/PepperDash/test-template/raw/main/.githooks/commit-msg"
 HOOKS_DIR = ".githooks"
 
 
@@ -18,7 +18,7 @@ def create_hooks_directory():
 
 
 def download_hook():
-    hook_path = os.path.join(HOOKS_DIR, "pre-commit")
+    hook_path = os.path.join(HOOKS_DIR, "commit-msg")
     print(f"Downloading the latest hooks from {HOOKS_REPO_URL}")
     request = urllib.request.Request(HOOKS_REPO_URL)
     
@@ -35,7 +35,7 @@ def download_hook():
 
 
 def make_hook_executable():
-    hook_path = os.path.join(HOOKS_DIR, "pre-commit")
+    hook_path = os.path.join(HOOKS_DIR, "commit-msg")
     if os.name == 'posix':  # For Unix-like systems
         print(f"Making the hook executable.")
         subprocess.run(["chmod", "+x", hook_path], check=True)

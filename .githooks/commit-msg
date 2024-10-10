@@ -1,9 +1,11 @@
 #!/bin/bash
 
-# Regex for conventional commit messages
+# Updated regex for conventional commit messages to be more flexible
 type_regex="(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)"
-scope_regex="(\([a-zA-Z0-9_-]+\))?"
-subject_regex=": .{1,50}"
+scope_regex="(\\([a-zA-Z0-9_\\-]+\\))?"
+subject_regex=": .{1,}"
+
+# Regex that allows the type, optional scope, colon, and subject
 conventional_commit_regex="^$type_regex$scope_regex$subject_regex$"
 
 # Get the commit message from the file provided by Git
@@ -18,7 +20,7 @@ if [[ -z "$commit_message" ]]; then
     exit 0
 fi
 
-# Adjusted regex check for conventional commit format
+# Check if the commit message follows the conventional commit format
 if ! [[ "$commit_message" =~ $conventional_commit_regex ]]; then
     echo -e "\033[31mERROR: Invalid commit message format.\033[0m"
     echo "Commit message does not follow Conventional Commit guidelines."
