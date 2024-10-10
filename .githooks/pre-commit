@@ -1,0 +1,24 @@
+# PowerShell version of pre-commit.ps1
+
+# Regex for conventional commit messages
+$TypeRegex = "(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)"
+$ScopeRegex = "(\([a-zA-Z0-9_-]+\))?"
+$SubjectRegex = ": .{1,50}"
+$ConventionalCommitRegex = "^$TypeRegex$ScopeRegex$SubjectRegex$"
+
+# Get the commit message
+$CommitMessage = Get-Content -Path ".git/COMMIT_EDITMSG" -Raw
+
+# Check if the commit message follows the conventional commit format
+If ($CommitMessage -notmatch $ConventionalCommitRegex) {
+    Write-Host "`e[31mERROR: Invalid commit message format.`e[0m"
+    Write-Host "Commit message does not follow Conventional Commit guidelines."
+    Write-Host "Example formats:"
+    Write-Host "  feat(scope): add new login feature"
+    Write-Host "  fix: correct typo in documentation"
+    Write-Host "  chore(deps): update dependencies"
+    Exit 1
+}
+
+# If the commit message is valid, allow the commit to proceed
+Exit 0
