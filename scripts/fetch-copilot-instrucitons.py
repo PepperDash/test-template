@@ -1,10 +1,16 @@
 import os
 import urllib.request
 import sys
+import json
 from urllib.error import HTTPError
 
-# URL to the shared copilot-instructions.md file
-COPILOT_INSTRUCTIONS_URL = "https://github.com/PepperDash/test-template/raw/main/.github/copilot-instructions.md"
+# Load configuration from manifest file
+with open("scripts/manifest.json", "r") as manifest_file:
+    config = json.load(manifest_file)
+
+REPO_BASE_URL = config.get("REPO_BASE_URL")
+BRANCH = config.get("BRANCH")
+COPILOT_INSTRUCTIONS_URL = f"{REPO_BASE_URL}/.github/copilot-instructions.md"
 COPILOT_DIR = ".github"
 
 def create_github_directory():
@@ -40,6 +46,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-    

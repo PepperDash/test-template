@@ -2,12 +2,17 @@ import os
 import subprocess
 import urllib.request
 import sys
+import json
 from urllib.error import HTTPError
 
-# URL to the shared repository for hooks
-HOOKS_REPO_URL = "https://github.com/PepperDash/test-template/raw/main/.githooks/commit-msg"
-HOOKS_DIR = ".githooks"
+# Load configuration from manifest file
+with open("scripts/manifest.json", "r") as manifest_file:
+    config = json.load(manifest_file)
 
+REPO_BASE_URL = config.get("REPO_BASE_URL")
+BRANCH = config.get("BRANCH")
+HOOKS_REPO_URL = f"{REPO_BASE_URL}/.githooks/commit-msg"
+HOOKS_DIR = ".githooks"
 
 def create_hooks_directory():
     if not os.path.exists(HOOKS_DIR):
@@ -51,7 +56,6 @@ def configure_git_hooks_path():
         print(f"Failed to configure Git hooks path: {e}")
         sys.exit(1)
 
-
 def main():
     create_hooks_directory()
     download_hook()
@@ -62,6 +66,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-    
