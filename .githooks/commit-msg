@@ -31,3 +31,4 @@ fi
 
 # If the commit message is valid, allow the commit to proceed
 exit 0
+
