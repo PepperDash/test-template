@@ -39,6 +39,7 @@ def main():
         "fetch-copilot-instructions",
         "fetch-gitattributes",
         "fetch-gitignore",
+        "fetch-releaserc",
         "setup-hooks"
     ]
 
