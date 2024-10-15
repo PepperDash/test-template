@@ -1,1 +1,1 @@
-always end each commit with END
+always end each commit message with END
