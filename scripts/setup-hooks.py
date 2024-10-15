@@ -39,6 +39,8 @@ def download_hook():
         sys.exit(1)
 
 
+
+
 def make_hook_executable():
     hook_path = os.path.join(HOOKS_DIR, "commit-msg")
     if os.name == 'posix':  # For Unix-like systems
