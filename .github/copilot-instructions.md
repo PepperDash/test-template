@@ -24,6 +24,3 @@ After prefix and scope, write a concise description in the imperative mood:
 feat(auth): add login validation
 fix(database): correct data retrieval issue
 docs(readme): update installation instructions
-
-
-
