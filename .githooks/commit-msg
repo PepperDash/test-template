@@ -29,8 +29,6 @@ while read oldrev newrev refname; do
 
   for commit in $rev_span; do
     commit_msg_header=$(git show -s --format=%s $commit)
-    echo "Checking commit: $commit" >&2
-    echo "Commit message: $commit_msg_header" >&2
     if ! [[ "$commit_msg_header" =~ (${commit_msg_regex})|(${merge_msg_regex}) ]]; then
       echo "$commit" >&2
       echo "ERROR: Invalid commit message format" >&2
