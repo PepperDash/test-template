@@ -6,7 +6,7 @@ from urllib.error import HTTPError
 
 # Load configuration from manifest file
 with open("scripts/manifest.json", "r") as manifest_file:
-    config = json.load(manifest_file)
+    config = json.load(manifest_file),
 
 REPO_BASE_URL = config.get("REPO_BASE_URL")
 BRANCH = config.get("BRANCH")
