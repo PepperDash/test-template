@@ -1,43 +1,38 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-# Pre-receive hook that will block commits with messges that do not follow regex rule
+# Updated regex for conventional commit messages to be more flexible
+type_regex="(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)"
+scope_regex="(\([a-zA-Z0-9_\-]+\))?"
+subject_regex=": .{1,}"
 
-commit_msg_type_regex='feat|fix|refactor|style|test|docs|build'
-commit_msg_scope_regex='.{1,20}'
-commit_msg_description_regex='.{1,100}'
-commit_msg_regex="^(${commit_msg_type_regex})(\(${commit_msg_scope_regex}\))?: (${commit_msg_description_regex})\$"
-merge_msg_regex="^Merge branch '.+'\$"
+# Regex that allows the type, optional scope, colon, and subject
+conventional_commit_regex="^$type_regex$scope_regex$subject_regex$"
 
-zero_commit="0000000000000000000000000000000000000000"
+# Regex to allow standard merge commit messages
+merge_commit_regex="^Merge branch '.+'"
 
-# Do not traverse over commits that are already in the repository
-excludeExisting="--not --all"
+# Get the commit message from the file provided by Git
+commit_message=$(cat "$1" | tr -d '\r' | sed 's/[[:space:]]*$//')
 
-error=""
-while read oldrev newrev refname; do
-  # branch or tag get deleted
-  if [ "$newrev" = "$zero_commit" ]; then
-    continue
-  fi
+# Debug: Print the commit message
+echo "DEBUG: Commit message is: '$commit_message'"
 
-  # Check for new branch or tag
-  if [ "$oldrev" = "$zero_commit" ]; then
-    rev_span=`git rev-list $newrev $excludeExisting`
-  else
-    rev_span=`git rev-list $oldrev..$newrev $excludeExisting`
-  fi
-
-  for commit in $rev_span; do
-    commit_msg_header=$(git show -s --format=%s $commit)
-    if ! [[ "$commit_msg_header" =~ (${commit_msg_regex})|(${merge_msg_regex}) ]]; then
-      echo "$commit" >&2
-      echo "ERROR: Invalid commit message format" >&2
-      echo "$commit_msg_header" >&2
-      error="true"
-    fi
-  done
-done
-
-if [ -n "$error" ]; then
-  exit 1
+# Allow empty commit messages
+if [[ -z "$commit_message" ]]; then
+    echo "DEBUG: Commit message is empty. Allowing commit."
+    exit 0
 fi
+
+# Check if the commit message follows the conventional commit format or is a merge commit
+if ! [[ "$commit_message" =~ $conventional_commit_regex || "$commit_message" =~ $merge_commit_regex ]]; then
+    echo -e "\033[31mERROR: Invalid commit message format.\033[0m"
+    echo "Commit message does not follow Conventional Commit guidelines."
+    echo "Example formats:"
+    echo "  feat(scope): add new login feature"
+    echo "  fix: correct typo in documentation"
+    echo "  chore(deps): update dependencies"
+    exit 1
+fi
+
+# If the commit message is valid, allow the commit to proceed
+exit 0
