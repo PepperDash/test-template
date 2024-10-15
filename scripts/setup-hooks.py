@@ -20,7 +20,7 @@ except json.JSONDecodeError:
 REPO_BASE_URL = config.get("REPO_BASE_URL")
 BRANCH = config.get("BRANCH")
 HOOKS_REPO_URL = f"{REPO_BASE_URL}/.githooks/commit-msg"
-HOOKS_DIR = ".githooks"
+HOOKS_DIR = ".git/hooks"
 
 
 def create_hooks_directory():
@@ -80,11 +80,21 @@ def configure_git_hooks_path():
         sys.exit(1)
 
 
+def verify_commit_msg_hook():
+    hook_path = os.path.join(HOOKS_DIR, "commit-msg")
+    print("Verifying that the commit-msg hook exists.")
+    if not os.path.exists(hook_path):
+        print(f"Error: commit-msg hook not found at {hook_path}")
+        sys.exit(1)
+    print("Commit-msg hook verification passed.")
+
+
 def main():
     create_hooks_directory()
     download_hook()
     make_hook_executable()
     configure_git_hooks_path()
+    verify_commit_msg_hook()
     print("Git hooks have been set up successfully.")
 
 
