@@ -17,6 +17,7 @@ commit_message=$(cat "$1" | tr -d '\r' | sed 's/[[:space:]]*$//')
 # Debug: Print the commit message
 echo "DEBUG: Commit message is: '$commit_message'"
 
+
 # Allow empty commit messages
 if [[ -z "$commit_message" ]]; then
     echo "DEBUG: Commit message is empty. Allowing commit."
