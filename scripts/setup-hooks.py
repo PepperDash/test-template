@@ -17,6 +17,7 @@ def create_hooks_directory():
         print(f"Hooks directory {HOOKS_DIR} already exists.")
 
 
+
 def download_hook():
     hook_path = os.path.join(HOOKS_DIR, "pre-commit")
     print(f"Downloading the latest hooks from {HOOKS_REPO_URL}")
